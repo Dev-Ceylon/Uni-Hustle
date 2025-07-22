@@ -414,35 +414,67 @@
     }
     @media (max-width: 600px) {
       .hero-logo-corner {
-        top: 12px;
-        left: 12px;
-        width: 70px;
-        height: 70px;
+        top: 16px;
+        left: 16px;
+        width: 60px;
+        height: 60px;
       }
       .hero-content {
-        margin-top: 4vh;
+        margin-top: 5vh;
+        padding: 0 1rem;
       }
-      .section { padding: 2.5rem 0.5rem 1.5rem 0.5rem; }
+      .hero-title {
+        font-size: 1.9rem;
+      }
+      .hero-subtext {
+        font-size: 1rem;
+        max-width: 95%;
+      }
+      .btn {
+        padding: 0.8em 1.5em;
+        font-size: 0.95rem;
+      }
+      .section { padding: 2.5rem 1rem 1.5rem 1rem; }
       .services-grid { grid-template-columns: 1fr; }
       .audience-img { width: 90vw; }
       .contact-us-section {
         flex-direction: column;
-        gap: 2rem;
+        gap: 1.5rem;
         align-items: stretch;
       }
       .contact-info {
         justify-content: center;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0rem;
+        gap: 1.5rem;
       }
       .contact-cta {
         max-width: 100%;
         width: 100%;
+        padding: 1.8rem 1.2rem;
+      }
+       .cta-text {
+        font-size: 1.1rem;
       }
       .contact-form-section {
         max-width: 100%;
         width: 100%;
       }
-      footer { padding: 1.2rem 0.5rem; }
+      .carousel-title, .contact-section-title {
+        font-size: 1.7rem;
+        margin-bottom: 1.8rem;
+      }
+      .carousel-pills {
+        padding: 0 1rem;
+        gap: 0.7rem;
+      }
+       .carousel-pill {
+        font-size: 0.9rem;
+        padding: 0.5em 1.2em;
+      }
+      .carousel-container {
+        border-radius: 24px;
+      }
+      footer { padding: 1.5rem 1rem; }
     }
     /* Services Scroller */
     .hero-services-scroller {
@@ -686,25 +718,62 @@
       cursor: pointer;
     }
     .carousel-dot.active { background: var(--primary-blue); }
+
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.7);
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 1.2rem;
+      color: var(--primary-blue);
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.08);
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .carousel-arrow:hover, .carousel-arrow:focus {
+      background: var(--primary-blue);
+      color: white;
+      box-shadow: 0 2px 12px rgba(37,99,235,0.15);
+      outline: none;
+    }
+    .carousel-arrow-left { left: 24px; }
+    .carousel-arrow-right { right: 24px; }
+
     @media (max-width: 700px) {
       .carousel-slide {
         flex-direction: column;
         align-items: center;
         text-align: center;
-        gap: 1.2rem;
-        padding: 1.5rem 0.5rem;
+        gap: 1.5rem;
+        padding: 2.5rem 1.5rem;
       }
       .carousel-img {
-        width: 98vw;
-        max-width: 99vw;
+        width: 90vw;
+        max-width: 380px;
         min-width: 0;
-        height: 180px;
-        margin-bottom: 1.2rem;
+        height: 220px;
+        margin-bottom: 1.5rem;
       }
       .carousel-content {
         align-items: center;
         text-align: center;
+        gap: 1rem;
       }
+      .carousel-arrow {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+      }
+      .carousel-arrow-left { left: 16px; }
+      .carousel-arrow-right { right: 16px; }
     }
     @keyframes slideInTop {
       0% { opacity: 0; transform: translateY(-60px); }
@@ -739,7 +808,7 @@
       <h1 class="hero-title">Too Much Uni Work? Let Me Handle It For You!</h1>
       <p class="hero-subtext">Are your projects, assignments, or IT work stressing you out? Don't worry. I'll do it for you, fast and neat!</p>
       <div class="hero-ctas">
-        <a href="#contact-form" class="btn primary">Get Help Now</a>
+        <a href="#contact" class="btn primary">Get Help Now</a>
         <a href="#services-carousel" class="btn">Explore Services</a>
       </div>
     </div>
@@ -848,11 +917,13 @@
         </div>
       </div>
       <div class="carousel-dots"></div>
+      <button class="carousel-arrow carousel-arrow-left" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+      <button class="carousel-arrow carousel-arrow-right" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
     </div>
   </section>
 
   <!-- Contact Us Section -->
-  <h2 class="contact-section-title">Contact Us</h2>
+  <h2 class="contact-section-title" id="contact">Contact Us</h2>
   <section class="contact-us-section">
     <div class="contact-info">
       <div class="contact-cta">
@@ -943,17 +1014,22 @@
     let lastScrollY = window.scrollY;
     let lastDirection = null;
     document.addEventListener('DOMContentLoaded', function() {
-      const exploreBtn = document.querySelector('a.btn[href="#services-carousel"]');
-      if (exploreBtn) {
-        exploreBtn.addEventListener('click', function(e) {
+      // Generic smooth scroll for all buttons with anchor links
+      document.querySelectorAll('a.btn[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
           e.preventDefault();
-          const target = document.getElementById('services-carousel');
+          const targetId = this.getAttribute('href').substring(1);
+          const target = document.getElementById(targetId);
           if (target) {
             target.scrollIntoView({ behavior: 'smooth' });
-            setTimeout(triggerServicesAnimation, 500);
+            // Special trigger for services animation
+            if (targetId === 'services-carousel') {
+              setTimeout(triggerServicesAnimation, 500);
+            }
           }
         });
-      }
+      });
+
       // IntersectionObserver for scroll-in animation
       const target = document.getElementById('services-carousel');
       if (target) {
@@ -1002,6 +1078,8 @@
       let slides = Array.from(document.querySelectorAll('.carousel-slide'));
       const dotsContainer = document.querySelector('.carousel-dots');
       const pills = Array.from(document.querySelectorAll('.carousel-pill'));
+      const prevButton = document.querySelector('.carousel-arrow-left');
+      const nextButton = document.querySelector('.carousel-arrow-right');
       let index = 0;
       let autoScroll;
       let isTransitioning = false;
@@ -1052,6 +1130,23 @@
         goToSlide(index + 1);
       }
 
+      function prevSlide() {
+        if (isTransitioning) return;
+        if (index === 0) {
+            isTransitioning = true;
+            track.style.transition = 'none';
+            index = slides.length - 1;
+            track.style.transform = `translateX(-${index * 100}%)`;
+            
+            setTimeout(() => {
+                track.style.transition = 'transform 1.2s cubic-bezier(.4,0,.2,1)';
+                goToSlide(index - 1);
+            }, 50);
+        } else {
+            goToSlide(index - 1);
+        }
+      }
+
       function autoSlide() {
         autoScroll = setInterval(() => {
           if (index < slides.length - 1) {
@@ -1083,6 +1178,16 @@
           goToSlide(i);
           pauseAutoSlideFor(15000);
         });
+      });
+
+      prevButton.addEventListener('click', () => {
+        prevSlide();
+        pauseAutoSlideFor(15000);
+      });
+
+      nextButton.addEventListener('click', () => {
+        nextSlide();
+        pauseAutoSlideFor(15000);
       });
 
       // Listen for transition end to handle seamless loop
