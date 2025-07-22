@@ -6,6 +6,8 @@
   <title>Uni Hustle – Student Tech Support</title>
   <link rel="icon" href="images/unihustle_logo.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
     :root {
       --primary-blue: #2563eb;
@@ -944,8 +946,7 @@
     <div class="contact-form-section" id="contact-form">
       <div class="contact-form-title">Get in Touch</div>
       <form class="contact-form" action="https://formsubmit.co/info.devceylon@gmail.com" method="POST">
-        <input type="hidden" name="_next" value="https://dev-ceylon.github.io/Uni-Hustle/">
-        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://dev-ceylon.github.io/?submitted=true">
         <label for="name">Full Name</label>
         <input type="text" id="name" name="name" required placeholder="Your Name" />
         <label for="email">Email Address</label>
@@ -1200,5 +1201,20 @@
       window.addEventListener('resize', () => goToSlide(index));
     })();
   </script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('submitted') === 'true') {
+      Swal.fire({
+        icon: 'success',
+        title: 'Message Sent Successfully',
+        text: 'We will get back to you soon!',
+        confirmButtonColor: '#2563eb'
+      });
+    }
+  });
+</script>
+
 </body>
 </html>
