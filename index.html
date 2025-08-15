@@ -848,6 +848,25 @@
       }
       .carousel-arrow-left { left: 16px; }
       .carousel-arrow-right { right: 16px; }
+      .carousel-dots {
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+      .carousel-dot {
+        width: 10px;
+        height: 10px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .carousel-dots {
+        gap: 0.4rem;
+        margin-top: 0.8rem;
+      }
+      .carousel-dot {
+        width: 8px;
+        height: 8px;
+      }
     }
     @keyframes slideInTop {
       0% { opacity: 0; transform: translateY(-60px); }
